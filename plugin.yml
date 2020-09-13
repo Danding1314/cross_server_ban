@@ -1,0 +1,31 @@
+name: cross_server_ban
+main: cross_server_ban\cross_server_ban
+version: 1.0.0
+api: [1.0.0, 3.1.0]
+
+load: POSTWORLD
+author: leolee3914__Lee_Siu_San
+description: cross_server_ban
+
+commands:
+ csban:
+  permission: cross_server_ban.command.cross_server_ban
+  description: "cross_server_ban"
+  usage: /csban <Player ID> <reason ID> <reason>
+ csunban:
+  permission: cross_server_ban.command.cross_server_ban
+  description: "cross_server_ban"
+  usage: /csunban <Player ID> <reason>
+ csbanxuid:
+  permission: cross_server_ban.command.cross_server_ban
+  description: "cross_server_ban"
+  usage: /csbanxuid <XUID> <reason ID> <reason>
+ csunbanxuid:
+  permission: cross_server_ban.command.cross_server_ban
+  description: "cross_server_ban"
+  usage: /csunbanxuid <XUID> <reason>
+
+permissions:
+ cross_server_ban.command.cross_server_ban:
+  description: "cross_server_ban"
+  default: op
