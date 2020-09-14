@@ -15,6 +15,7 @@ use pocketmine\entity\Arrow;
 use pocketmine\level\Location;
 use pocketmine\event\inventory\InventoryPickupItemEvent;
 use pocketmine\nbt\tag\Compound;
+use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\item\Item;
@@ -153,12 +154,12 @@ class cross_server_ban extends PluginBase implements Listener{
 		}
 	}
 	
-	function pj ( PlayerJoinEvent $e ) {
+	function login ( PlayerLoginEvent $e ) {
 		$p = $e->getPlayer();
 		$nn = $p->getLowerCaseName();
 		
 		$xuid = $p->getXuid();
-		if ( $xuid !== '' ) {
+		if ( $this->getServer()->requiresAuthentication() and $xuid !== '' ) {
 			$this->xuidmap->{$nn} = $xuid;
 			
 			if ( !$p->isOp() and !$p->isWhitelisted() ) {
@@ -176,7 +177,8 @@ class cross_server_ban extends PluginBase implements Listener{
 				}
 				close:
 				if ( $isbanned === true ) {
-					$p->close('', self::CLOSE_PLAYER_MESSAGE);
+					$e->setKickMessage(self::CLOSE_PLAYER_MESSAGE);
+					$e->setCancelled(true);
 				}
 			}
 		}
