@@ -162,36 +162,26 @@ class cross_server_ban extends PluginBase implements Listener{
 		if ( $this->getServer()->requiresAuthentication() and $xuid !== '' ) {
 			$this->xuidmap->{$nn} = $xuid;
 			
-			if ( $this->checkbanlist($p) ) {
-				$e->setKickMessage(self::CLOSE_PLAYER_MESSAGE);
-				$e->setCancelled(true);
-			}
-		}
-	}
-	
-	function checkbanlist ( Player $p ) : bool{
-		$xuid = $p->getXuid();
-		if ( !$this->checkwhitelist($p) ) {
-			foreach ( $this->banlist->getAll() as $v ) {
-				if ( $v['x'] === $xuid ) {
-					return true;
-				}
-			}
-			foreach ( array_reverse($this->listtosend->getAll()) as $v ) {
-				if ( $v['xuid'] === $xuid ) {
-					if ( $v['ban'] === true ) {
-						return true;
-					} else {
-						return false;
+			if ( !$p->isOp() and !$p->isWhitelisted() ) {
+				$isbanned = false;
+				foreach ( $this->banlist->getAll() as $v ) {
+					if ( $v['x'] === $xuid ) {
+						$isbanned = true;
+						goto close;
 					}
 				}
+				foreach ( $this->listtosend->getAll() as $v ) {
+					if ( $v['xuid'] === $xuid ) {
+						$isbanned = ($v['ban'] === true);
+					}
+				}
+				close:
+				if ( $isbanned === true ) {
+					$e->setKickMessage(self::CLOSE_PLAYER_MESSAGE);
+					$e->setCancelled(true);
+				}
 			}
 		}
-		return false;
-	}
-	
-	function checkwhitelist ( Player $p ) : bool{
-		return ($p->isOp() or $p->isWhitelisted());
 	}
 	
 	function sync_banlist () {
@@ -328,9 +318,7 @@ class cross_server_ban extends PluginBase implements Listener{
 						$p = $this->getServer()->getPlayerExact($nn);
 						if ( $p instanceof Player ) {
 							$n = $p->getName();
-							if ( !$this->checkwhitelist($p) ) {
-								$p->close('', self::CLOSE_PLAYER_MESSAGE);
-							}
+							$p->close('', self::CLOSE_PLAYER_MESSAGE);
 						}
 						$smid = $this->data->submitcounter;
 						$this->data->submitcounter = $smid+1;
@@ -373,9 +361,7 @@ class cross_server_ban extends PluginBase implements Listener{
 						$p = $this->getServer()->getPlayerExact($nn);
 						if ( $p instanceof Player ) {
 							$n = $p->getName();
-							if ( !$this->checkwhitelist($p) ) {
-								$p->close('', self::CLOSE_PLAYER_MESSAGE);
-							}
+							$p->close('', self::CLOSE_PLAYER_MESSAGE);
 						}
 						$smid = $this->data->submitcounter;
 						$this->data->submitcounter = $smid+1;
