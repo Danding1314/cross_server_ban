@@ -295,6 +295,10 @@ class cross_server_ban extends PluginBase implements Listener{
 	}
 	
 	public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
+		if ( !$this->getServer()->requiresAuthentication() ) {
+			$sender->sendMessage(TF::RED.'!!! 伺服器未有啟用XBOX驗證 (xbox-auth)，你無法使用跨服封禁系統 !!!');
+			return true;
+		}
 		if ( $this->stopsend !== false ) {
 			$sender->sendMessage(TF::RED.'!!! 本伺服器的API密碼不在數據庫中 !!!');
 			$sender->sendMessage(TF::RED.'!!! 請嘗試向插件作者Leo申請 !!!');
