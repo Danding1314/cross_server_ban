@@ -173,11 +173,6 @@ class cross_server_ban extends PluginBase implements Listener{
 	function checkbanlist ( Player $p ) : bool{
 		$xuid = $p->getXuid();
 		if ( !$this->checkwhitelist($p) ) {
-			foreach ( $this->banlist->getAll() as $v ) {
-				if ( $v['x'] === $xuid ) {
-					return true;
-				}
-			}
 			foreach ( array_reverse($this->listtosend->getAll()) as $v ) {
 				if ( $v['xuid'] === $xuid ) {
 					if ( $v['ban'] === true ) {
@@ -185,6 +180,11 @@ class cross_server_ban extends PluginBase implements Listener{
 					} else {
 						return false;
 					}
+				}
+			}
+			foreach ( $this->banlist->getAll() as $v ) {
+				if ( $v['x'] === $xuid ) {
+					return true;
 				}
 			}
 		}
