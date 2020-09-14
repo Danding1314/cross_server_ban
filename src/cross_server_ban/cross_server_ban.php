@@ -117,12 +117,14 @@ class cross_server_ban extends PluginBase implements Listener{
 		}
 		if ( $this->config->{'___dev_api_mode'} === true ) {
 			$this->apiurl = $this->config->{'___dev_api_url'};
+			$devprefix = '___';
 		} else {
 			$this->apiurl = $this->config->{'api_url'};
+			$devprefix = '';
 		}
 		
-		$this->listtosend = new Config($this->getDataFolder()."listtosend.yml", Config::YAML, []);
-		$this->data = new Config($this->getDataFolder()."data.yml", Config::YAML, []);
+		$this->listtosend = new Config($this->getDataFolder().$devprefix."listtosend.yml", Config::YAML, []);
+		$this->data = new Config($this->getDataFolder().$devprefix."data.yml", Config::YAML, []);
 		if ( !isset($this->data->counter) ) {
 			$all = $this->listtosend->getAll();
 			if ( count($all) > 0 ) {
@@ -141,9 +143,9 @@ class cross_server_ban extends PluginBase implements Listener{
 		
 		$this->stopsend = false;
 		
-		$this->xuidmap = new Config($this->getDataFolder()."id_xuid_map.yml", Config::YAML, []);
-		$this->banlist = new Config($this->getDataFolder()."banlist.yml", Config::YAML, []);
-		$this->cachedxuid = new Config($this->getDataFolder()."cachedxuid.yml", Config::YAML, []);
+		$this->xuidmap = new Config($this->getDataFolder().$devprefix."id_xuid_map.yml", Config::YAML, []);
+		$this->banlist = new Config($this->getDataFolder().$devprefix."banlist.yml", Config::YAML, []);
+		$this->cachedxuid = new Config($this->getDataFolder().$devprefix."cachedxuid.yml", Config::YAML, []);
 		
 		$this->getScheduler()->scheduleRepeatingTask(new callbackTask([$this,"sync_banlist"]),310);// ~15s
 	}

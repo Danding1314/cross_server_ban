@@ -36,8 +36,8 @@
 | ignore_server | 忽略來自這些伺服器的ban請求 |
 | ignore_reason_type | 忽略這些原因類型ID的ban請求 |
 | \___server_api_password | <成員伺服器專用> API密碼 |
-| \___dev_api_mode | <插件作者Leo專用> |
-| \___dev_api_url | <插件作者Leo專用> |
+| \___dev_api_mode | <測試模式開關> |
+| \___dev_api_url | <測試模式API網址> |
 
 ## 指令
 
