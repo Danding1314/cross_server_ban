@@ -145,7 +145,6 @@ class cross_server_ban extends PluginBase implements Listener{
 		
 		$this->xuidmap = new Config($this->getDataFolder().$devprefix."id_xuid_map.yml", Config::YAML, []);
 		$this->banlist = new Config($this->getDataFolder().$devprefix."banlist.yml", Config::YAML, []);
-		$this->cachedxuid = new Config($this->getDataFolder().$devprefix."cachedxuid.yml", Config::YAML, []);
 		
 		$this->getScheduler()->scheduleRepeatingTask(new callbackTask([$this,"sync_banlist"]),310);// ~15s
 	}
