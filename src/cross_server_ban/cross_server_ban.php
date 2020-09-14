@@ -205,15 +205,20 @@ class cross_server_ban extends PluginBase implements Listener{
 		
 		$sendlist = '';
 		if ( $this->stopsend === false ) {
-			foreach ( $this->listtosend->getAll() as $smid=>$v ) {
-				$sendlist = '&p='.$this->config->{'___server_api_password'}.'&smid='.$smid.'&ban='.($v['ban']===true?1:0);
-				array_map(function ( $v ) {
-					return urlencode($v);
-				}, $v);
-				$sendlist .= '&x='.$v['xuid'].'&t='.$v['time'].'&n='.$v['nn'].'&ri='.$v['reasonid'].'&rs='.$v['reason'];
-				break;
+			$pwd = $this->config->{'___server_api_password'};
+			if ( strlen($pwd) === 43 ) {
+				$sendlist .= '&p='.$pwd;
+				foreach ( $this->listtosend->getAll() as $smid=>$v ) {
+					$sendlist .= '&smid='.$smid.'&ban='.($v['ban']===true?1:0);
+					array_map(function ( $v ) {
+						return urlencode($v);
+					}, $v);
+					$sendlist .= '&x='.$v['xuid'].'&t='.$v['time'].'&n='.$v['nn'].'&ri='.$v['reasonid'].'&rs='.$v['reason'];
+					break;
+				}
+			} else {
+				$this->stopsend = true;
 			}
-			
 		}
 		$this->getServer()->getAsyncPool()->submitTask(new getURL_Task($this->apiurl.'?v='.self::API_VERSION.'&c='.$this->data->counter.'&sn='.$this->config->{'server_name'}.$sendlist));
 	}
