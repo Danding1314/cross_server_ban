@@ -310,6 +310,10 @@ class cross_server_ban extends PluginBase implements Listener{
 			case 'csban';
 				$n = $nn = strtolower((string)array_shift($args));
 				if ( $nn !== '' ) {
+					if ( !Player::isValidUserName($nn) ) {
+						$sender->sendMessage(TF::RED.'!!! 玩家ID無效 !!!');
+						return true;
+					}
 					$reasonid = array_shift($args);
 					$reason = join(' ', $args);
 					if ( !is_numeric($reasonid) ) {
@@ -361,6 +365,10 @@ class cross_server_ban extends PluginBase implements Listener{
 			case 'csunban';
 				$n = $nn = strtolower((string)array_shift($args));
 				if ( $nn !== '' ) {
+					if ( !Player::isValidUserName($nn) ) {
+						$sender->sendMessage(TF::RED.'!!! 玩家ID無效 !!!');
+						return true;
+					}
 					$reason = join(' ', $args);
 					if ( $reason === '' ) {
 						$sender->sendMessage(TF::RED.'!!! 解封原因不得留空 !!!');
@@ -404,7 +412,7 @@ class cross_server_ban extends PluginBase implements Listener{
 				}
 				break;
 			case 'csbanxuid';
-				$xuid = strtolower((string)array_shift($args));
+				$xuid = (string)array_shift($args);
 				if ( $xuid !== '' ) {
 					if ( !is_numeric($xuid) ) {
 						$sender->sendMessage(TF::RED.'!!! XUID不合法，無法封鎖 !!!');
@@ -444,7 +452,7 @@ class cross_server_ban extends PluginBase implements Listener{
 				}
 				break;
 			case 'csunbanxuid';
-				$xuid = strtolower((string)array_shift($args));
+				$xuid = (string)array_shift($args);
 				if ( $xuid !== '' ) {
 					if ( !is_numeric($xuid) ) {
 						$sender->sendMessage(TF::RED.'!!! XUID不合法，無法封鎖 !!!');
